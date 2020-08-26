@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const topScore = new mongoose.Schema({
   score: {
-    type: String,
+    type: Number,
     required: true
   },
   name: {
