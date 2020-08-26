@@ -54,7 +54,7 @@ router.get('/topScores/getFive', (req, res, next) => {
       if (scores.length > 10) {
         scores = scores.splice(0, 10)
       }
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < scores.length; i++) {
         let j = i + 1
         scores[i].placement = j
       }
@@ -105,6 +105,20 @@ router.patch('/topScores/:id', removeBlanks, (req, res, next) => {
       return topScore.updateOne(req.body.topScore)
     })
     // if that succeeded, return 204 and no JSON
+    .then(() => res.sendStatus(204))
+    // if an error occurs, pass it to the handler
+    .catch(next)
+})
+
+// DESTROY all
+// DELETE /topScores/5a7db6c74d55bc51bdf39793
+router.delete('/topScores/all', (req, res, next) => {
+  TopScore.find()
+    .then(handle404)
+    .then(topScore => {
+      topScore.forEach(score => score.deleteOne())
+    })
+    // send back 204 and no content if the deletion succeeded
     .then(() => res.sendStatus(204))
     // if an error occurs, pass it to the handler
     .catch(next)
